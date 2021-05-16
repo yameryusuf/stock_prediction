@@ -194,21 +194,21 @@
 	 	 	 	 	"datatype":"datatype",
 	 	 	 	 	"apikey":"apikey"
 	 	 	 	}
-     ,"Daily":
+     ,"Digital_Daily":
 	 	 	 	{	
 	 	 	 	 	"function":"DIGITAL_CURRENCY_DAILY",
 	 	 	 	 	"symbol":"symbol",
 	 	 	 	 	"market":"market",
 	 	 	 	 	"apikey":"apikey"
 	 	 	 	}
-     ,"Weekly":
+     ,"Digital_Weekly":
 	 	 	 	{	
 	 	 	 	 	"function":"DIGITAL_CURRENCY_WEEKLY",
 	 	 	 	 	"symbol":"symbol",
 	 	 	 	 	"market":"market",
 	 	 	 	 	"apikey":"apikey"
 	 	 	 	}
-     ,"Monthly":
+     ,"Digital_Monthly":
 	 	 	 	{	
 	 	 	 	 	"function":"DIGITAL_CURRENCY_MONTHLY",
 	 	 	 	 	"symbol":"symbol",
