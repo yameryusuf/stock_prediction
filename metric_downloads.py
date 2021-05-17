@@ -6,6 +6,7 @@ Retrieve intraday stock data from Google Finance.
 import csv
 import datetime
 import re
+import os
 import pathlib
 from dateutil.relativedelta import *
 import time
@@ -29,8 +30,9 @@ def process_times(startmonth, startyear, endmonth, endyear):
     if now - startdate > datetime.timedelta(days=730) or enddate - now > datetime.timedelta(days=0):
         raise ValueError("Date range out of bounds")
     else:
+        relative_months = range(relativedelta(enddate, startdate).months + 1 + relativedelta(enddate, startdate).years * 12)
         return [((relativedelta(now, dates).months + 1) % 13, (relativedelta(now, dates).years + 1)) for dates in
-                (startdate + relativedelta(months=+n) for n in range(relativedelta(enddate, startdate).months + 1))]
+                (startdate + relativedelta(months=+n) for n in relative_months)]
 
 
 def function_call(function, parameters):
@@ -74,13 +76,13 @@ def get_indicator_metrics(functions, parameters,counter):
 def get_historical_intraday_data(parameters, startmonth, startyear, endmonth, endyear, counter):
     date_range = process_times(startmonth, startyear, endmonth, endyear)
     net_data = []
-    historical_data_csv = pathlib.Path('historical_data.csv')
+    historical_data_csv = parameters['symbol'] + '/historical_data.csv'
     exists = False
-    if historical_data_csv.exists():
-        modified_date = datetime.datetime.fromtimestamp(historical_data_csv.stat().st_mtime).date()
+    if pathlib.Path(historical_data_csv).exists():
+        modified_date = datetime.datetime.fromtimestamp(pathlib.Path(historical_data_csv).stat().st_mtime).date()
         today_date = datetime.datetime.today().date()
         if modified_date == today_date:
-            final_data = pd.read_csv('historical_data.csv',index_col=1)
+            final_data = pd.read_csv(historical_data_csv,index_col=1)
             final_data = final_data.drop(final_data.columns[0],1)
             final_data.index = pd.to_datetime(final_data.index)
             exists = True
@@ -96,40 +98,46 @@ def get_historical_intraday_data(parameters, startmonth, startyear, endmonth, en
                 time.sleep(65)
             net_data.extend(readings)
         final_data = pd.DataFrame(net_data, columns=header)
-        final_data.to_csv('historical_data.csv')
+        final_data = final_data.set_index(final_data.columns[0])
+        final_data.index = pd.to_datetime(final_data.index)
+        final_data = final_data.drop(final_data.columns[0], 1)
+        final_data.to_csv(historical_data_csv)
     return final_data.sort_index()
 
 
 def main():
     counter = 0
-    generic_indicatior_parameters = {'symbol': 'PLTR',
+
+    generic_indicatior_parameters = {'symbol': 'TSLA',
                                      'interval': '60min',
                                      'time_period': '60',
                                      'datatype': 'csv',
                                      'series_type': 'close',
                                      'apikey': '1A673HM6LF1CZG2I'
                                      }
+    symbol_folder = generic_indicatior_parameters['symbol']
+    if not pathlib.Path(symbol_folder).exists():
+        os.mkdir(symbol_folder)
+        os.mkdir(symbol_folder + '/plots')
     historical_data = get_historical_intraday_data(
-        parameters=generic_indicatior_parameters, startmonth=10,
-        startyear=2020, endmonth=5, endyear=2021,counter=counter)
+        parameters=generic_indicatior_parameters, startmonth=6,
+        startyear=2019, endmonth=5, endyear=2021,counter=counter)
     extended_historical_data = add_all_ta_features(historical_data,open='open',close='close',high='high',low='low',volume='volume')
-    # metric_dfs = get_indicator_metrics(
-    #     functions=["Earnings", "Income_Statement", "Balance_Sheet", "Cash_Flow", "SMA_High_Usage", "EMA_High_Usage",
-    #                "T3",
-    #                "STOCH_High_Usage", "RSI_High_Usage", "ADX_High_Usage", "CCI_High_Usage", "AROON_High_Usage",
-    #                "BBANDS_High_Usage", "ULTOSC", "HT_TRENDLINE"], parameters=generic_indicatior_parameters, counter=counter)
-    extended_historical_data.to_csv('extended_historical_data.csv')
+    # metric_dfs = get_indicator_metrics( functions=["Earnings", "Income_Statement", "Balance_Sheet", "Cash_Flow",
+    # "SMA_High_Usage", "EMA_High_Usage", "T3", "STOCH_High_Usage", "RSI_High_Usage", "ADX_High_Usage",
+    # "CCI_High_Usage", "AROON_High_Usage", "BBANDS_High_Usage", "ULTOSC", "HT_TRENDLINE"],
+    # parameters=generic_indicatior_parameters, counter=counter)
+    extended_historical_data.to_csv(symbol_folder + '/extended_historical_data.csv')
     for i, col in enumerate(extended_historical_data.columns):
         plt.figure(figsize=(10, 8), dpi=100)
         extended_historical_data[col].plot(fig=plt.figure(i),x_compat=True)
         plt.xlabel("Dates")
         plt.setp(plt.gca().xaxis.get_majorticklabels(), rotation=90)
-        plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=10))
+        plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=20))
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d-%m-%Y"))
         plt.title(col)
         fig = plt.gcf()
         plt.tight_layout()
-        fig.savefig('plots/'+ str(i) + '_' + col + '.png', dpi=300)
-    plt.show()
+        fig.savefig(symbol_folder + '/plots/' + str(i) + '_' + col + '.png', dpi=300)
 if __name__ == "__main__":
     main()
