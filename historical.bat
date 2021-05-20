@@ -1,0 +1,1 @@
+start "" "C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\pythonw.exe" "C:\Users\YAM\PycharmProjects\Stocks\historical_prices.py"
