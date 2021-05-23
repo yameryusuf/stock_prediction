@@ -1,92 +1,18 @@
-from datetime import datetime
-import numpy as np
-conversion = {
-    0: lambda x: datetime.strptime(x.decode('ascii'), "%m-%d-%Y %H:%M:%S"),
-    1: np.float,
-    2: np.float,
-    3: np.float,
-    4: np.float,
-    5: np.float,
-    6: np.float,
-    7: np.float,
-    8: np.float,
-    9: np.float,
-    10: np.float,
-    11: np.float,
-    12: np.float,
-    13: np.float,
-    14: np.float,
-    15: np.float,
-    16: np.float,
-    17: np.float,
-    18: np.float,
-    19: np.float,
-    20: np.float,
-    21: np.float,
-    22: np.float,
-    23: np.float,
-    24: np.float,
-    25: np.float,
-    26: np.float,
-    27: np.float,
-    28: np.float,
-    29: np.float,
-    30: np.float,
-    31: np.float,
-    32: np.float,
-    33: np.float,
-    34: np.float,
-    35: np.float,
-    36: np.float,
-    37: np.float,
-    38: np.float,
-    39: np.float,
-    40: np.float,
-    41: np.float,
-    42: np.float,
-    43: np.float,
-    44: np.float,
-    45: np.float,
-    46: np.float,
-    47: np.float,
-    48: np.float,
-    49: np.float,
-    50: np.float,
-    51: np.float,
-    52: np.float,
-    53: np.float,
-    54: np.float,
-    55: np.float,
-    56: np.float,
-    57: np.float,
-    58: np.float,
-    59: np.float,
-    60: np.float,
-    61: np.float,
-    62: np.float,
-    63: np.float,
-    64: np.float,
-    65: np.float,
-    66: np.float,
-    67: np.float,
-    68: np.float,
-    69: np.float,
-    70: np.float,
-    71: np.float,
-    72: np.float,
-    73: np.float,
-    74: np.float,
-    75: np.float,
-    76: np.float,
-    77: np.float,
-    78: np.float,
-    79: np.float,
-    80: np.float,
-    81: np.float,
-    82: np.float,
-    83: np.float,
-    84: np.float,
-    85: np.float,
-    86: np.float,
-    87: np.float
-}
+financial_columns = [
+    "volume_adi"    "volume_obv"    "volume_cmf"    "volume_fi"    "volume_mfi"    "volume_em"    "volume_sma_em"    
+    "volume_vpt"    "volume_nvi"    "volume_vwap"    "volatility_atr"    "volatility_bbm"    "volatility_bbh"    
+    "volatility_bbl"    "volatility_bbw"    "volatility_bbp"    "volatility_bbhi"    "volatility_bbli"    
+    "volatility_kcc"    "volatility_kch"    "volatility_kcl"    "volatility_kcw"    "volatility_kcp"    
+    "volatility_kchi"    "volatility_kcli"    "volatility_dcl"    "volatility_dch"    "volatility_dcm"    
+    "volatility_dcw"    "volatility_dcp"    "volatility_ui"    "trend_macd"    "trend_macd_signal"    "trend_macd_diff"    
+    "trend_sma_fast"    "trend_sma_slow"    "trend_ema_fast"    "trend_ema_slow"    "trend_adx"    "trend_adx_pos"    
+    "trend_adx_neg"    "trend_vortex_ind_pos"    "trend_vortex_ind_neg"    "trend_vortex_ind_diff"    "trend_trix"    
+    "trend_mass_index"    "trend_cci"    "trend_dpo"    "trend_kst"    "trend_kst_sig"    "trend_kst_diff"    
+    "trend_ichimoku_conv"    "trend_ichimoku_base"    "trend_ichimoku_a"    "trend_ichimoku_b"    
+    "trend_visual_ichimoku_a"    "trend_visual_ichimoku_b"    "trend_aroon_up"    "trend_aroon_down"    
+    "trend_aroon_ind"    "trend_psar_up"    "trend_psar_down"    "trend_psar_up_indicator"    
+    "trend_psar_down_indicator"    "trend_stc"    "momentum_rsi"    "momentum_stoch_rsi"    
+    "momentum_stoch_rsi_k"    "momentum_stoch_rsi_d"    "momentum_tsi"    "momentum_uo"    
+    "momentum_stoch"    "momentum_stoch_signal"    "momentum_wr"    "momentum_ao"    "momentum_kama"    "momentum_roc"    
+    "momentum_ppo"    "momentum_ppo_signal"    "momentum_ppo_hist"    "others_dr"    "others_dlr"    "others_cr "
+    ]
